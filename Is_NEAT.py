@@ -1,12 +1,12 @@
 import multiprocessing
 import os
 import pickle
-import warnings
 
 import numpy as np
 import neat
 import gym
 import pygame
+import matplotlib.pyplot as plt
 
 runs_per_net = 2
 
@@ -61,6 +61,29 @@ def run():
         pickle.dump(winner, f)
 
     print(winner)
+
+    plot_stats(stats)
+
+
+def plot_stats(statistics, filename="avg_fitness.svg"):
+    """ Plots the population's average and best fitness. """
+
+    generation = range(len(statistics.most_fit_genomes))
+    best_fitness = [c.fitness for c in statistics.most_fit_genomes]
+    avg_fitness = np.array(statistics.get_fitness_mean())
+
+    plt.plot(generation, avg_fitness, 'b-', label="average")
+    plt.plot(generation, best_fitness, 'r-', label="best")
+
+    plt.title("Population's average and best fitness")
+    plt.xlabel("Generations")
+    plt.ylabel("Fitness")
+    plt.grid()
+    plt.legend(loc="best")
+    plt.savefig(filename)
+    plt.show()
+
+    plt.close()
 
 
 if __name__ == '__main__':
