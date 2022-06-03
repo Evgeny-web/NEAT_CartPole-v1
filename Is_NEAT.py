@@ -19,14 +19,14 @@ def eval_genome(genome, config):
     fitnesses = []
 
     for runs in range(runs_per_net):
-        env = gym.make('CartPole-v1')
+        env = gym.make('BipedalWalker-v3')
 
         observation = env.reset()
         # Run the given simulation for up to num_steps time steps.
         fitness = 0.0
         done = False
         while not done:
-            action = np.argmax(net.activate(observation))
+            action = net.activate(observation)
             observation, reward, done, info = env.step(action)
             fitness += reward
 
@@ -64,10 +64,8 @@ def run():
 
     print(winner)
 
-    node_names = {-1: 'x', -2: 'dx', -3: 'theta', -4: 'dtheta'}
-
     plot_stats(stats)
-    draw_net(config, winner, view=True, node_names=node_names,
+    draw_net(config, winner, view=True,
              filename="winner-feedforward.gv")
 
 
